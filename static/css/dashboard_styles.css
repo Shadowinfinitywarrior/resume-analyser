@@ -1,0 +1,383 @@
+/* --- Dashboard Specific Styles --- */
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Layout */
+.dashboard-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-title {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.dashboard-area-badge {
+    background: rgba(13, 110, 253, 0.1);
+    color: var(--primary-color);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* File Upload */
+.file-upload-group {
+    margin-bottom: 15px;
+}
+
+.file-upload-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.file-upload-input {
+    padding: 10px;
+    border: 2px dashed #cbd5e1;
+    background: #f8fafc;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-full-width {
+    width: 100%;
+}
+
+/* Resume List */
+.resume-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.resume-item:last-child {
+    border-bottom: none;
+}
+
+.resume-meta {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.no-resumes-text {
+    color: #666;
+    font-style: italic;
+}
+
+.badge-analyzed {
+    background-color: var(--success-color);
+    color: white;
+}
+
+/* Analysis Section */
+.analysis-card-header {
+    margin-bottom: 10px;
+}
+
+.score-container {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.score-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.score-bar-bg {
+    background: #e9ecef;
+    border-radius: 10px;
+    height: 12px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.score-bar {
+    height: 100%;
+    transition: width 1s ease-in-out;
+}
+
+.score-bar.high {
+    background: linear-gradient(90deg, #22c55e 0%, #10b981 100%);
+}
+
+.score-bar.medium {
+    background: linear-gradient(90deg, #eab308 0%, #ca8a04 100%);
+}
+
+.score-bar.low {
+    background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%);
+}
+
+.suggestions-title {
+    margin-bottom: 10px;
+}
+
+.suggestions-list {
+    padding-left: 20px;
+    color: #4b5563;
+}
+
+.suggestion-item {
+    margin-bottom: 8px;
+}
+
+.divider {
+    border-top: 1px solid #e5e7eb;
+    margin: 20px 0;
+}
+
+/* Job Market */
+.job-scroll-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.job-card {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    transition: background 0.2s;
+}
+
+.job-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.job-title {
+    margin: 0 0 5px 0;
+    color: var(--text-color);
+}
+
+.skill-tags {
+    margin-bottom: 8px;
+}
+
+.skill-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    margin-right: 4px;
+}
+
+.job-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.job-description {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.vacancies-info {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Applications */
+.applications-list {
+    display: grid;
+    gap: 10px;
+}
+
+.application-item {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-job-title {
+    font-weight: bold;
+}
+
+.app-score {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.app-status {
+    text-align: right;
+}
+
+.app-hr-notes {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 4px;
+    max-width: 150px;
+    text-align: right;
+    font-style: italic;
+}
+
+/* Modals & Popups */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+
+.modal-content-large {
+    max-width: 700px;
+}
+
+.modal-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Eligibility Result */
+.score-display-box {
+    text-align: center;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.score-value-large {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.score-level-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.recommendation-box {
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: #334155;
+    margin: 0;
+}
+
+.missing-skills-section {
+    display: none;
+    margin-bottom: 15px;
+}
+
+.missing-skills-header {
+    color: var(--error-color);
+    margin-bottom: 10px;
+}
+
+.tech-skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.missing-skill-badge {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.match-details-box {
+    padding: 15px;
+    background: #eff6ff;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 4px;
+}
+
+.loading-container {
+    text-align: center;
+    padding: 40px;
+    display: none;
+    /* hidden by default */
+}
+
+.loading-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}

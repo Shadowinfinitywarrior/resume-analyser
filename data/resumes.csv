@@ -1,0 +1,50 @@
+id,user_id,filename,content_text,upload_date,file_path1,5,resume_1.pdf,"Nithish K
+123xyz | 123456789 | {{email}} | LinkedIn
+Professional Experience
+Education
+Skills
+Python
+C
+Projects
+Certifications
+Languages
+tamil
+english
+Hobbies
+reading and writing
+abc, {{address}}Student
+2026 -- 2028
+Chairperson
+PSG, {{address}}B.Sc
+2026
+123
+1234hello
+{{projectLink}}
+hello123Hello
+2020
+",2026-01-20 21:18:12,data\uploads\877fa941-81c2-4d45-bb8c-d8176cde3f46_resume_1.pdf
+1,5,resume_1.pdf,"Nithish K
+123xyz | 123456789 | {{email}} | LinkedIn
+Professional Experience
+Education
+Skills
+Python
+C
+Projects
+Certifications
+Languages
+tamil
+english
+Hobbies
+reading and writing
+abc, {{address}}Student
+2026 -- 2028
+Chairperson
+PSG, {{address}}B.Sc
+2026
+123
+1234hello
+{{projectLink}}
+hello123Hello
+2020
+",2026-01-20 21:18:58,data\uploads\1df983e5-d4fe-4929-b082-7e8d9f3dbc6b_resume_1.pdf

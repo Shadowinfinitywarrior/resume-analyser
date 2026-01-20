@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Join ResumeAI - Choose Your Path{% endblock %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 900px; margin: 80px auto; text-align: center; position: relative;">
+    <div
+        style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 200px; height: 200px; background: var(--primary-glow); filter: blur(100px); opacity: 0.3; z-index: -1;">
+    </div>
+
+    <h2 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.04em;">Ready to Transform?
+    </h2>
+    <p
+        style="color: var(--text-muted); font-size: 1.25rem; margin-bottom: 4rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+        Select your entry point to the most advanced AI career ecosystem.</p>
+
+    <div class="grid grid-2" style="gap: 2.5rem; text-align: left;">
+        <div class="card"
+            style="border-radius: 40px; padding: 3rem; display: flex; flex-direction: column; height: 100%;">
+            <div
+                style="width: 80px; height: 80px; background: rgba(139, 92, 246, 0.1); border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin-bottom: 2rem; color: var(--primary);">
+                🚀
+            </div>
+            <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em;">Job Seeker</h3>
+            <p style="color: var(--text-muted); margin-bottom: 3rem; line-height: 1.7; flex-grow: 1;">Upload your
+                resume, unlock deep AI insights, and discover opportunities that match your unique professional DNA.</p>
+            <a href="{{ url_for('register', role='user') }}" class="btn btn-primary"
+                style="width: 100%; justify-content: center; padding: 1.25rem; border-radius: 100px; font-size: 1.1rem; font-weight: 700;">
+                Start as Candidate
+            </a>
+        </div>
+
+        <div class="card"
+            style="border-radius: 40px; padding: 3rem; display: flex; flex-direction: column; height: 100%;">
+            <div
+                style="width: 80px; height: 80px; background: rgba(236, 72, 153, 0.1); border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin-bottom: 2rem; color: var(--secondary);">
+                💼
+            </div>
+            <h3 style="font-size: 2rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em;">Recruiter</h3>
+            <p style="color: var(--text-muted); margin-bottom: 3rem; line-height: 1.7; flex-grow: 1;">Post dynamic
+                roles, manage your pipeline, and leverage predictive screening to find perfect-fit candidates instantly.
+            </p>
+            <a href="{{ url_for('register', role='hr') }}" class="btn btn-secondary"
+                style="width: 100%; justify-content: center; padding: 1.25rem; border-radius: 100px; font-size: 1.1rem; font-weight: 700; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1);">
+                Start as Recruiter
+            </a>
+        </div>
+    </div>
+
+    <p style="margin-top: 4rem; color: var(--text-muted); font-size: 1.1rem;">
+        Already part of the network? <a href="{{ url_for('login') }}"
+            style="color: var(--primary); font-weight: 800; text-decoration: none; margin-left: 0.5rem; border-bottom: 2px solid var(--primary-glow);">Login
+            here</a>
+    </p>
+</div>
+{% endblock %}

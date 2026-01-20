@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div
+        style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem;">
+        <div>
+            <h2
+                style="font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.5rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                Candidate Command</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Manage your professional profile and opportunities.
+            </p>
+        </div>
+        <div style="text-align: right;">
+            <span class="badge badge-success"
+                style="padding: 0.75rem 1.5rem; border-radius: 50px; font-size: 0.85rem; letter-spacing: 0.05em;">ACTIVE
+                SESSION</span>
+        </div>
+    </div>
+
+    <div class="grid grid-2" style="align-items: start; gap: 2.5rem;">
+        <!-- Left Column: Resume Management -->
+        <div class="grid" style="gap: 2.5rem;">
+            <!-- Upload New Resume -->
+            <div class="card" style="border-radius: 32px; position: relative; overflow: hidden;">
+                <div
+                    style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: var(--primary-glow); filter: blur(60px); opacity: 0.2;">
+                </div>
+                <div class="card-header" style="margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700;">Deploy Resume</h3>
+                    <span style="font-size: 1.5rem; opacity: 0.5;">📤</span>
+                </div>
+                <form action="{{ url_for('upload_resume') }}" method="post" enctype="multipart/form-data">
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <label
+                            style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; display: block;">ACCEPTED
+                            FORMATS: PDF, DOCX, TXT</label>
+                        <div style="position: relative;">
+                            <input type="file" id="resume" name="resume" required
+                                style="opacity: 0; position: absolute; width:100%; height:100%; cursor: pointer; z-index: 2;">
+                            <div style="padding: 3rem 2rem; border: 2px dashed rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); border-radius: 20px; text-align: center; transition: all 0.3s ease;"
+                                id="drop-zone">
+                                <span style="font-size: 2rem; display: block; margin-bottom: 1rem;">📄</span>
+                                <span style="color: var(--text-main); font-weight: 600;">Drop file here or click to
+                                    browse</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; padding: 1.25rem; border-radius: 100px; font-weight: 700; font-size: 1rem;">
+                        <span>Initialize AI Analysis</span>
+                        <span style="margin-left: 0.5rem;">✨</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Resume List -->
+            <div class="card" style="border-radius: 32px;">
+                <div class="card-header" style="margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700;">Document Vault</h3>
+                    <span style="font-size: 1.5rem; opacity: 0.5;">📂</span>
+                </div>
+                {% if resumes %}
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    {% for res in resumes %}
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.06)'"
+                        onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                        <div style="display: flex; align-items: center; gap: 1.25rem;">
+                            <div
+                                style="width: 48px; height: 48px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                📄</div>
+                            <div>
+                                <strong style="display: block; font-size: 1rem; color: #fff;">{{ res.filename
+                                    }}</strong>
+                                <small style="color: var(--text-muted); font-size: 0.8rem;">Uploaded on {{
+                                    res.upload_date }}</small>
+                            </div>
+                        </div>
+                        {% if analysis and analysis.id|string == res.id|string %}
+                        <span class="badge"
+                            style="background: rgba(16, 185, 129, 0.1); color: var(--success); font-size: 0.75rem; border: 1px solid rgba(16, 185, 129, 0.2);">ACTIVE</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 3rem 0;">
+                    <p style="color: var(--text-muted);">No documents found. Start by uploading one above.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if analysis %}
+            <div class="card"
+                style="border-radius: 32px; border-left: 4px solid var(--primary); background: linear-gradient(to bottom right, rgba(139, 92, 246, 0.05), rgba(17, 24, 39, 0.7));">
+                <div class="card-header" style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700;">AI Diagnostic</h3>
+                    <div
+                        style="background: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 100px; font-weight: 800; font-size: 0.9rem;">
+                        {{ analysis.ats_score }}% OPTIMIZED
+                    </div>
+                </div>
+
+                <div class="score-container" style="margin-bottom: 2.5rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.05em; color: var(--text-muted);">
+                        <span>ATS COMPATIBILITY ENGINE</span>
+                    </div>
+                    <div class="score-bar-bg" style="height: 12px; background: rgba(255,255,255,0.05);">
+                        {% set ats_score = analysis.ats_score|default(0)|int %}
+                        <div class="score-bar dynamic-width" style="--w: {{ ats_score }}%; border-radius: 7px;"></div>
+                    </div>
+                </div>
+
+                <h4
+                    style="margin-bottom: 1.25rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 1.25rem;">🧠</span> Strategy Recommendations
+                </h4>
+                <div style="display: grid; gap: 1rem;">
+                    {% for suggestion in analysis.suggestions %}
+                    <div
+                        style="display: flex; gap: 1rem; align-items: flex-start; padding: 1.25rem; background: rgba(255,255,255,0.02); border-radius: 16px; font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.03);">
+                        <span style="color: var(--primary); font-weight: 900;">•</span>
+                        {{ suggestion }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <a href="{{ url_for('check_satisfaction') }}" class="btn btn-secondary"
+                    style="width: 100%; margin-top: 2.5rem; padding: 1.25rem; border-radius: 100px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; font-weight: 700;">
+                    Deep Satisfaction Analysis →
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column: Jobs and Applications -->
+        <div class="grid" style="gap: 2.5rem;">
+            <!-- Job Market -->
+            <div class="card" style="border-radius: 32px;">
+                <div class="card-header" style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700;">Market Opportunities</h3>
+                    <div
+                        style="background: rgba(245, 158, 11, 0.1); color: var(--warning); padding: 0.4rem 0.8rem; border-radius: 100px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(245, 158, 11, 0.2);">
+                        {{ jobs|length }} LIVE ROLES
+                    </div>
+                </div>
+
+                {% if jobs %}
+                <div style="display: grid; gap: 1.5rem; max-height: 800px; overflow-y: auto; padding-right: 0.5rem;"
+                    class="custom-scrollbar">
+                    {% for job in jobs %}
+                    <div class="card"
+                        style="padding: 1.75rem; background: rgba(255,255,255,0.02); border-radius: 24px; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05);"
+                        onmouseover="this.style.border='1px solid var(--primary-glow)'; this.style.transform='translateX(5px)'"
+                        onmouseout="this.style.border='1px solid rgba(255,255,255,0.05)'; this.style.transform='none'">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                            <div>
+                                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem; color: #fff;">
+                                    {{ job.title }}</h4>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                    {% for skill in job.skills_required.split(',') %}
+                                    <span
+                                        style="background: rgba(139, 92, 246, 0.1); color: var(--primary); padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.75rem; font-weight: 700;">{{
+                                        skill.strip() }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="line-clamp-2"
+                            style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6;">
+                            {{ job.description }}
+                        </p>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;">
+                            <span
+                                style="font-size: 0.85rem; font-weight: 700; color: var(--secondary); display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 8px; height: 8px; background: var(--secondary); border-radius: 50%;">
+                                </div>
+                                {{ job.vacancies }} OPENINGS
+                            </span>
+                            <div style="display: flex; gap: 0.75rem;">
+                                <button onclick="checkEligibility('{{ job.id }}', '{{ job.title }}')" class="btn"
+                                    style="background: rgba(255,255,255,0.05); color: #fff; padding: 0.6rem 1.2rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.1);">Verify</button>
+                                <button onclick="openApplyModal('{{ job.id }}', '{{ job.title }}')"
+                                    class="btn btn-primary"
+                                    style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.9rem; font-weight: 700;">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 5rem 0;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.2;">🔭</div>
+                    <p style="color: var(--text-muted);">Scanning the horizon for new roles.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Applications -->
+            <div class="card" style="border-radius: 32px;">
+                <div class="card-header" style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700;">Pipeline Status</h3>
+                    <span style="font-size: 1.5rem; opacity: 0.5;">🛰️</span>
+                </div>
+                {% if applications %}
+                <div style="display: grid; gap: 1rem;">
+                    {% for app in applications %}
+                    <div
+                        style="padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <strong style="font-size: 1.1rem; font-weight: 800; color: #fff;">{{ app.job_title
+                                }}</strong>
+                            {% if app.status == 'Selected' %}
+                            <span class="badge"
+                                style="background: rgba(16, 185, 129, 0.1); color: var(--success);">SELECTED</span>
+                            {% elif app.status == 'Rejected' %}
+                            <span class="badge"
+                                style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">ARCHIVED</span>
+                            {% else %}
+                            <span class="badge" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">IN
+                                REVIEW</span>
+                            {% endif %}
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 24px; height: 4px; background: var(--primary); border-radius: 2px;">
+                                </div>
+                                <span style="color: var(--text-muted); font-weight: 700;">MATCH SCORE: <span
+                                        style="color: var(--primary);">{{ app.score }}%</span></span>
+                            </div>
+                            {% if app.hr_notes %}
+                            <div
+                                style="background: rgba(139, 92, 246, 0.05); padding: 0.5rem 1rem; border-radius: 12px; font-style: italic; color: var(--primary); font-size: 0.85rem; border: 1px dotted var(--primary-glow);">
+                                "{{ app.hr_notes }}"
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 2rem 0;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">No active applications in the stream.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals with Premium Styling -->
+<div id="applyModal" class="modal"
+    style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(10px);">
+    <div style="background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); margin: 10% auto; padding: 3rem; border-radius: 40px; width: 500px; box-shadow: 0 40px 100px rgba(0,0,0,0.8); position: relative;"
+        class="glass">
+        <h3 id="modalJobTitle" style="font-size: 2rem; font-weight: 800; margin-bottom: 2rem; color: #fff;">Deploy
+            Application</h3>
+        <form id="applyForm" method="POST">
+            <div class="form-group" style="margin-bottom: 2.5rem;">
+                <label
+                    style="color: var(--text-muted); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 1rem; display: block;">SELECT
+                    RESUME FROM VAULT</label>
+                <select name="resume_id" required
+                    style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.25rem; font-size: 1rem; color: #fff; width: 100%;">
+                    {% for res in resumes %}
+                    <option value="{{ res.id }}">{{ res.filename }} ({{ res.upload_date }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button type="button" class="btn"
+                    style="flex: 1; padding: 1rem; border-radius: 100px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); font-weight: 700;"
+                    onclick="closeApplyModal()">Abort</button>
+                <button type="submit" class="btn btn-primary"
+                    style="flex: 2; padding: 1rem; border-radius: 100px; font-weight: 800; font-size: 1rem;">Confirm
+                    Deployment</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Eligibility Modal -->
+<div id="eligibilityModal" class="modal"
+    style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(10px);">
+    <div style="background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); margin: 5% auto; padding: 3.5rem; border-radius: 40px; width: 700px; box-shadow: 0 40px 100px rgba(0,0,0,0.8); position: relative;"
+        class="glass">
+        <button onclick="closeEligibilityModal()"
+            style="position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: var(--text-muted); font-size: 2rem; cursor: pointer; transition: color 0.3s;"
+            onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'">&times;</button>
+
+        <h3 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 2.5rem; color: #fff; letter-spacing: -0.02em;">
+            Predictive Matching</h3>
+
+        <div id="eligibilityLoading" style="text-align: center; padding: 4rem 0;">
+            <div
+                style="width: 60px; height: 60px; border: 4px solid var(--primary-glow); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 2rem;">
+            </div>
+            <p style="font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; font-size: 0.9rem;">ANALYZING
+                SYNERGY...</p>
+        </div>
+
+        <div id="eligibilityResult" style="display: none;">
+            <div id="scoreCard"
+                style="display: flex; align-items: center; justify-content: space-between; padding: 2.5rem; border-radius: 32px; margin-bottom: 2.5rem; position: relative; overflow: hidden;">
+                <div style="position: relative; z-index: 1;">
+                    <div id="scoreValue"
+                        style="font-size: 5rem; font-weight: 900; line-height: 1; letter-spacing: -0.05em;"></div>
+                    <div id="eligibilityLevel"
+                        style="font-size: 1.5rem; font-weight: 800; margin-top: 0.5rem; letter-spacing: 0.05em;"></div>
+                </div>
+                <div style="font-size: 4rem; opacity: 0.2; z-index: 1;" id="scoreIcon">📊</div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.02); padding: 2rem; border-radius: 24px; margin-bottom: 2.5rem; border: 1px solid rgba(255,255,255,0.05); line-height: 1.7; font-size: 1.1rem; color: #cbd5e1;"
+                id="recommendation"></div>
+
+            <div id="missingSkills" style="margin-bottom: 2.5rem;">
+                <h4
+                    style="margin-bottom: 1.5rem; color: #fff; font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="color: var(--secondary);">•</span> TECHNICAL GAP ANALYSIS
+                </h4>
+                <div id="technicalSkills" style="display: flex; flex-wrap: wrap; gap: 0.75rem;"></div>
+            </div>
+
+            <button onclick="closeEligibilityModal()" class="btn btn-primary"
+                style="width: 100%; padding: 1.25rem; border-radius: 100px; font-weight: 800; font-size: 1.1rem;">
+                Acknowledge Insights
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .eligibility-result-card.high {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+        color: var(--success);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .eligibility-result-card.medium {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+        color: var(--warning);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .eligibility-result-card.low {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+        color: var(--danger);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+</style>
+
+<script>
+    function checkEligibility(jobId, jobTitle) {
+        const resumeId = "{{ resumes[-1].id if resumes else '' }}";
+        if (!resumeId) { alert('Electronic identification not found. Please upload a resume first.'); return; }
+
+        document.getElementById('eligibilityModal').style.display = 'block';
+        document.getElementById('eligibilityLoading').style.display = 'block';
+        document.getElementById('eligibilityResult').style.display = 'none';
+
+        fetch(`/user/check_eligibility/${jobId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `resume_id=${resumeId}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('eligibilityLoading').style.display = 'none';
+                document.getElementById('eligibilityResult').style.display = 'block';
+
+                const scoreCard = document.getElementById('scoreCard');
+                document.getElementById('scoreValue').textContent = data.score + '%';
+                document.getElementById('eligibilityLevel').textContent = data.eligibility_level.toUpperCase() + ' SYNERGY';
+
+                scoreCard.className = 'eligibility-result-card ' + data.eligibility_level.toLowerCase();
+                document.getElementById('recommendation').textContent = data.recommendation;
+
+                const iconMap = { 'High': '⭐', 'Medium': '📈', 'Low': '⚠️' };
+                document.getElementById('scoreIcon').textContent = iconMap[data.eligibility_level] || '📊';
+
+                const techContainer = document.getElementById('technicalSkills');
+                techContainer.innerHTML = '';
+                if (data.missing_technical && data.missing_technical.length > 0) {
+                    document.getElementById('missingSkills').style.display = 'block';
+                    data.missing_technical.forEach(skill => {
+                        const badge = document.createElement('span');
+                        badge.style.cssText = 'background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 0.6rem 1.25rem; border-radius: 100px; font-size: 0.8rem; font-weight: 800; border: 1px solid rgba(239, 68, 68, 0.2);';
+                        badge.textContent = skill.toUpperCase();
+                        techContainer.appendChild(badge);
+                    });
+                } else {
+                    document.getElementById('missingSkills').style.display = 'none';
+                }
+            });
+    }
+
+    function closeEligibilityModal() { document.getElementById('eligibilityModal').style.display = 'none'; }
+    function openApplyModal(jobId, jobTitle) {
+        document.getElementById('modalJobTitle').innerText = 'Deploy for ' + jobTitle;
+        document.getElementById('applyForm').action = '/user/apply/' + jobId;
+        document.getElementById('applyModal').style.display = 'block';
+    }
+    function closeApplyModal() { document.getElementById('applyModal').style.display = 'none'; }
+    window.onclick = function (event) {
+        if (event.target.className === 'modal') {
+            closeApplyModal();
+            closeEligibilityModal();
+        }
+    }
+</script>
+{% endblock %}

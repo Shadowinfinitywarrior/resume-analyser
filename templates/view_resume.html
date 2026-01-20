@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Intelligence - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 1000px; margin: 0 auto;">
+
+    <div
+        style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem;">
+        <div>
+            <h2
+                style="font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.5rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                Intelligence Hub</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Reviewing Capability: <span
+                    style="font-weight: 700; color: var(--primary);">{{ resume.filename }}</span></p>
+        </div>
+        <a href="{{ url_for('hr_dashboard') }}" class="btn btn-secondary"
+            style="border-radius: 100px; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); font-weight: 700;">
+            <span>&larr; Return to Stream</span>
+        </a>
+    </div>
+
+    <div class="grid" style="gap: 2.5rem;">
+        {% if resume.file_path %}
+        <!-- Priority: Original Document Rendering -->
+        <div class="card"
+            style="border-radius: 40px; border-top: 4px solid var(--primary); background: rgba(17, 24, 39, 0.8);">
+            <div class="card-header" style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700;">Original Integrity</h3>
+                <div
+                    style="background: rgba(139, 92, 246, 0.1); color: var(--primary); padding: 0.5rem 1rem; border-radius: 100px; font-weight: 700; font-size: 0.8rem; border: 1px solid rgba(139, 92, 246, 0.2);">
+                    LIVE RENDERING</div>
+            </div>
+            <div
+                style="height: 850px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); position: relative; background: #fff;">
+                <iframe src="{{ url_for('get_resume_file', filename=resume.file_path.split('\\')[-1].split('/')[-1]) }}"
+                    style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+            <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+                <a href="{{ url_for('get_resume_file', filename=resume.file_path.split('\\')[-1].split('/')[-1]) }}"
+                    target="_blank" class="btn btn-primary"
+                    style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.9rem;">
+                    Open External View ↗
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Secondary: AI Extracted Intelligence -->
+        <div class="card" style="border-radius: 40px;">
+            <div class="card-header" style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700;">Intelligence Extract</h3>
+                <span class="badge"
+                    style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted); font-size: 0.75rem; border-radius: 50px; padding: 0.4rem 1rem;">Processed:
+                    {{ resume.upload_date }}</span>
+            </div>
+
+            <div
+                style="background: rgba(255, 255, 255, 0.02); padding: 2.5rem; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.03); font-family: 'Plus Jakarta Sans', sans-serif; white-space: pre-wrap; line-height: 1.8; color: var(--text-muted); font-size: 1rem; position: relative;">
+                <div style="position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem; opacity: 0.1;">📝</div>
+                {{ resume.content_text }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    iframe {
+        filter: invert(1) hue-rotate(180deg) brightness(0.9);
+        /* Subtle dark mode for PDF/Docs if possible, can be removed if direct PDF is preferred */
+    }
+</style>
+{% endblock %}

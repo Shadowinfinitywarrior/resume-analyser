@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}HR Dashboard - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div
+        style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem;">
+        <div>
+            <h2
+                style="font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.5rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                Recruitment Command</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Orchestrate your talent pipeline with AI precision.
+            </p>
+        </div>
+        <div style="text-align: right;">
+            <span class="badge"
+                style="background: rgba(139, 92, 246, 0.1); color: var(--primary); padding: 0.75rem 1.5rem; border-radius: 50px; font-size: 0.85rem; letter-spacing: 0.05em; border: 1px solid rgba(139, 92, 246, 0.2);">HR
+                ELITE ACCESS</span>
+        </div>
+    </div>
+
+    <div class="grid grid-2" style="grid-template-columns: 350px 1fr; align-items: start; gap: 3rem;">
+        <!-- Left Column: Post Job -->
+        <div class="grid" style="gap: 2.5rem; align-self: start;">
+            <div class="card" style="border-radius: 32px; position: relative; overflow: hidden;">
+                <div
+                    style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: var(--primary-glow); filter: blur(60px); opacity: 0.2;">
+                </div>
+                <div class="card-header" style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700;">Deploy Role</h3>
+                    <span style="font-size: 1.5rem; opacity: 0.5;">📝</span>
+                </div>
+                <form action="{{ url_for('post_job') }}" method="post">
+                    <div class="form-group">
+                        <label>POSITION TITLE</label>
+                        <input type="text" id="title" name="title" placeholder="e.g. Senior Neural Architect" required
+                            style="border-radius: 16px;">
+                    </div>
+                    <div class="form-group">
+                        <label>MISSION DESCRIPTION</label>
+                        <textarea id="description" name="description" rows="5"
+                            placeholder="Define the scope and objectives..." required
+                            style="border-radius: 16px; resize: none;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>REQUIRED CAPABILITIES (CSV)</label>
+                        <input type="text" id="skills" name="skills" placeholder="python, pytorch, scaling" required
+                            style="border-radius: 16px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 2.5rem;">
+                        <label>VACANCIES</label>
+                        <input type="number" id="vacancies" name="vacancies" min="1" value="1" required
+                            style="border-radius: 16px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; padding: 1.25rem; border-radius: 100px; font-weight: 800; font-size: 1rem;">
+                        <span>Post to Network</span>
+                        <span style="margin-left: 0.5rem;">📡</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Column: Manage Applications -->
+        <div class="grid" style="gap: 2.5rem;">
+            <div class="card" style="border-radius: 32px;">
+                <div class="card-header" style="margin-bottom: 2.5rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700;">Active Pipeline</h3>
+                    <div
+                        style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted); padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">
+                        {{ job_applications|length }} NODES</div>
+                </div>
+
+                {% if job_applications %}
+                <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+                    {% for job_id, data in job_applications.items() %}
+                    <div style="padding: 2.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 32px; transition: all 0.3s ease;"
+                        onmouseover="this.style.borderColor='rgba(255,255,255,0.1)'"
+                        onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 1.5rem;">
+                            <div>
+                                <h3 style="font-size: 1.75rem; font-weight: 800; color: #fff; letter-spacing: -0.02em;">
+                                    {{ data.title }}</h3>
+                                <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem; align-items: center;">
+                                    <span
+                                        style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em;">REF:
+                                        {{ job_id }}</span>
+                                    <div
+                                        style="width: 4px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 50%;">
+                                    </div>
+                                    {% if data.status == 'Open' %}
+                                    <span style="color: var(--success); font-size: 0.8rem; font-weight: 800;">●
+                                        OPERATIONAL</span>
+                                    {% else %}
+                                    <span style="color: var(--danger); font-size: 0.8rem; font-weight: 800;">●
+                                        ARCHIVED</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 0.75rem;">
+                                <a href="{{ url_for('bulk_upload_resumes', job_id=job_id) }}" class="btn"
+                                    style="background: rgba(139, 92, 246, 0.1); color: var(--primary); padding: 0.6rem 1.25rem; border-radius: 50px; font-size: 0.85rem; font-weight: 700; text-decoration: none; border: 1px solid rgba(139, 92, 246, 0.2);">Bulk
+                                    Screen</a>
+                                <a href="{{ url_for('view_screening_results', job_id=job_id) }}" class="btn"
+                                    style="background: rgba(255,255,255,0.05); color: #fff; padding: 0.6rem 1.25rem; border-radius: 50px; font-size: 0.85rem; font-weight: 700; text-decoration: none; border: 1px solid rgba(255,255,255,0.1);">Analytics</a>
+                                <a href="{{ url_for('toggle_job', job_id=job_id) }}" class="btn"
+                                    style="background: rgba(255,255,255,0.05); border-radius: 50px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; padding: 0; border: 1px solid rgba(255,255,255,0.1);">
+                                    {% if data.status == 'Open' %}🔒{% else %}🔓{% endif %}
+                                </a>
+                            </div>
+                        </div>
+
+                        {% if data.apps %}
+                        <form action="{{ url_for('bulk_update_apps') }}" method="post" id="bulkForm-{{ job_id }}">
+                            <div
+                                style="margin-bottom: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.01); border-radius: 20px; display: flex; align-items: center; gap: 1.25rem; border: 1px solid rgba(255,255,255,0.03);">
+                                <span
+                                    style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em;">BATCH
+                                    ACTIONS</span>
+                                <input type="text" name="justification" placeholder="Executive reasoning..."
+                                    style="flex: 1; min-width: 0; background: transparent; border: none; font-size: 0.95rem; color: #fff; padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);"
+                                    required>
+                                <div style="display: flex; gap: 0.75rem;">
+                                    <button type="submit" name="action" value="select" class="btn btn-primary"
+                                        style="padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.85rem; font-weight: 800;">SELECT</button>
+                                    <button type="submit" name="action" value="reject" class="btn"
+                                        style="background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 0.6rem 1.5rem; border-radius: 50px; font-size: 0.85rem; font-weight: 800; border: 1px solid rgba(239, 68, 68, 0.2);">REJECT</button>
+                                </div>
+                            </div>
+
+                            <div style="overflow-x: auto;" class="custom-scrollbar">
+                                <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                                    <thead>
+                                        <tr style="text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                            <th style="padding: 1rem 0.5rem; width: 40px;">
+                                                <input type="checkbox" onclick="toggleAll(this, '{{ job_id }}')">
+                                            </th>
+                                            <th
+                                                style="padding: 1rem 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em;">
+                                                CANDIDATE</th>
+                                            <th
+                                                style="padding: 1rem 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em;">
+                                                MATCH</th>
+                                            <th
+                                                style="padding: 1rem 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em;">
+                                                ELIGIBILITY</th>
+                                            <th
+                                                style="padding: 1rem 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.05em;">
+                                                DECISION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for app in data.apps %}
+                                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); transition: all 0.2s ease;"
+                                            onmouseover="this.style.background='rgba(255,255,255,0.01)'"
+                                            onmouseout="this.style.background='transparent'">
+                                            <td style="padding: 1.25rem 0.5rem;">
+                                                <input type="checkbox" name="app_ids" value="{{ app.id }}"
+                                                    class="chk-{{ job_id }}">
+                                            </td>
+                                            <td style="padding: 1.25rem 1rem;">
+                                                <div style="font-weight: 700; color: #fff; font-size: 1rem;">{{
+                                                    app.username }}</div>
+                                                <a href="{{ url_for('view_resume', resume_id=app.resume_id) }}"
+                                                    target="_blank"
+                                                    style="font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 600;">Inspect
+                                                    Intelligence ↗</a>
+                                            </td>
+                                            <td style="padding: 1.25rem 1rem;">
+                                                {% set score = app.score|default(0)|int %}
+                                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                                    <span style="font-weight: 800; color: var(--primary);">{{ score
+                                                        }}%</span>
+                                                    <div
+                                                        style="width: 60px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px;">
+                                                        <div class="dynamic-width"
+                                                            style="--w: {{ score }}%; height: 100%; background: var(--primary); border-radius: 2px;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td style="padding: 1.25rem 1rem;">
+                                                {% set el_level = app.eligibility|default('Low') %}
+                                                <span
+                                                    class="badge {% if el_level == 'High' %}badge-glow-success{% elif el_level == 'Medium' %}badge-glow-warning{% else %}badge-glow-danger{% endif %}"
+                                                    style="font-size: 0.7rem; letter-spacing: 0.05em; padding: 0.4rem 0.8rem; border-radius: 50px; font-weight: 800;">
+                                                    {{ el_level|upper }}
+                                                </span>
+                                            </td>
+                                            <td style="padding: 1.25rem 1rem;">
+                                                {% if app.status == 'Selected' %}
+                                                <span
+                                                    style="color: var(--success); font-weight: 800; font-size: 0.8rem;">SELECTED</span>
+                                                {% elif app.status == 'Rejected' %}
+                                                <span
+                                                    style="color: var(--danger); font-weight: 800; font-size: 0.8rem;">REJECTED</span>
+                                                {% else %}
+                                                <span
+                                                    style="color: var(--warning); font-weight: 800; font-size: 0.8rem;">PENDING</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                        {% else %}
+                        <div
+                            style="text-align: center; padding: 3rem; color: var(--text-muted); background: rgba(255,255,255,0.01); border-radius: 24px; border: 1px dashed rgba(255,255,255,0.1);">
+                            <p style="font-weight: 500;">No sync detected. Awaiting applications.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 6rem 0;">
+                    <div style="font-size: 3.5rem; margin-bottom: 1.5rem; opacity: 0.1;">📡</div>
+                    <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem;">Market stream is
+                        currently empty.</p>
+                    <button class="btn btn-primary"
+                        style="padding: 1rem 2.5rem; border-radius: 100px; font-weight: 800;">Initiate First
+                        Role</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+</style>
+
+<script>
+    function toggleAll(source, jobId) {
+        const checkboxes = document.getElementsByClassName('chk-' + jobId);
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+{% endblock %}

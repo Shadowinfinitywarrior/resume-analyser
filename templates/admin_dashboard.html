@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div
+        style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem;">
+        <div>
+            <h2
+                style="font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.5rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                System Overwatch</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Master control protocol and analytics.</p>
+        </div>
+        <div style="text-align: right;">
+            <span class="badge"
+                style="background: rgba(255, 255, 255, 0.1); color: #fff; padding: 0.75rem 1.5rem; border-radius: 50px; font-size: 0.85rem; letter-spacing: 0.05em; border: 1px solid rgba(255, 255, 255, 0.2);">ROOT
+                ACCESS GRANTED</span>
+        </div>
+    </div>
+
+    <!-- Stats Matrix -->
+    <div class="grid grid-3" style="margin-bottom: 3rem; gap: 2rem;">
+        <div class="card stat-card"
+            style="border-bottom: 4px solid var(--primary); background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(17, 24, 39, 0.7));">
+            <div class="stat-label" style="letter-spacing: 0.1em; font-weight: 800;">TOTAL POPULATION</div>
+            <div class="stat-value" style="color: var(--primary); font-size: 3.5rem;">{{ stats.users }}</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">ACTIVE IDENTITIES</p>
+        </div>
+        <div class="card stat-card"
+            style="border-bottom: 4px solid var(--success); background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(17, 24, 39, 0.7));">
+            <div class="stat-label" style="letter-spacing: 0.1em; font-weight: 800;">LIVE CONTRACTS</div>
+            <div class="stat-value" style="color: var(--success); font-size: 3.5rem;">{{ stats.jobs }}</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">MARKET OPPORTUNITIES</p>
+        </div>
+        <div class="card stat-card"
+            style="border-bottom: 4px solid var(--warning); background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(17, 24, 39, 0.7));">
+            <div class="stat-label" style="letter-spacing: 0.1em; font-weight: 800;">DATA FLOW</div>
+            <div class="stat-value" style="color: var(--warning); font-size: 3.5rem;">{{ stats.apps }}</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">PROCESSED INTERACTIONS</p>
+        </div>
+    </div>
+
+    <div class="grid grid-2" style="gap: 2.5rem; align-items: start;">
+        <!-- User Management -->
+        <div class="card" style="border-radius: 32px;">
+            <div class="card-header" style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700;">Identity Registry</h3>
+                <span style="font-size: 1.5rem; opacity: 0.5;">👥</span>
+            </div>
+            <div style="max-height: 500px; overflow-y: auto;" class="custom-scrollbar">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <th
+                                style="padding: 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em;">
+                                IDENTITY</th>
+                            <th
+                                style="padding: 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em;">
+                                ACCESS LEVEL</th>
+                            <th
+                                style="padding: 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em; text-align: right;">
+                                PROTOCOL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); transition: all 0.2s ease;"
+                            onmouseover="this.style.background='rgba(255,255,255,0.01)'"
+                            onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1.25rem 1rem;">
+                                <div style="font-weight: 700; color: #fff;">{{ user.username }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">{{
+                                    user.email }}</div>
+                            </td>
+                            <td style="padding: 1.25rem 1rem;">
+                                <span class="badge"
+                                    style="background: rgba(255,255,255,0.05); color: var(--text-muted); font-size: 0.7rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 0.4rem 0.8rem; font-weight: 700; letter-spacing: 0.05em;">{{
+                                    user.role|upper }}</span>
+                            </td>
+                            <td style="padding: 1.25rem 1rem; text-align: right;">
+                                {% if user.role != 'admin' %}
+                                <a href="{{ url_for('admin_delete_user', user_id=user.id) }}"
+                                    onclick="return confirm('Confirm identity termination? This action is irreversible.')"
+                                    style="color: var(--danger); font-weight: 800; text-decoration: none; font-size: 0.75rem; letter-spacing: 0.05em; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.8rem; border-radius: 50px; background: rgba(239, 68, 68, 0.05); transition: all 0.2s;">TERMINATE</a>
+                                {% else %}
+                                <span
+                                    style="font-size: 0.7rem; color: var(--success); font-weight: 700; letter-spacing: 0.05em; opacity: 0.5;">SECURE</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Job Moderation -->
+        <div class="card" style="border-radius: 32px;">
+            <div class="card-header" style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.5rem; font-weight: 700;">Contract Governance</h3>
+                <span style="font-size: 1.5rem; opacity: 0.5;">🛡️</span>
+            </div>
+            {% if jobs %}
+            <div style="max-height: 500px; overflow-y: auto;" class="custom-scrollbar">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <th
+                                style="padding: 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em;">
+                                POSITION</th>
+                            <th
+                                style="padding: 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em;">
+                                STATE</th>
+                            <th
+                                style="padding: 1rem; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em; text-align: right;">
+                                PROTOCOL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in jobs %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); transition: all 0.2s ease;"
+                            onmouseover="this.style.background='rgba(255,255,255,0.01)'"
+                            onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1.25rem 1rem;">
+                                <div style="font-weight: 700; color: #fff;">{{ job.title }}</div>
+                                <div
+                                    style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
+                                    {{ job.description }}</div>
+                            </td>
+                            <td style="padding: 1.25rem 1rem;">
+                                {% if job.status == 'Open' %}
+                                <span
+                                    style="color: var(--success); font-weight: 800; font-size: 0.75rem; letter-spacing: 0.05em;">●
+                                    LIVE</span>
+                                {% else %}
+                                <span
+                                    style="color: var(--danger); font-weight: 800; font-size: 0.75rem; letter-spacing: 0.05em;">●
+                                    CLOSED</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 1.25rem 1rem; text-align: right;">
+                                <a href="{{ url_for('admin_delete_job', job_id=job.id) }}"
+                                    onclick="return confirm('Confirm contract purge?')"
+                                    style="color: var(--danger); font-weight: 800; text-decoration: none; font-size: 0.75rem; letter-spacing: 0.05em; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.8rem; border-radius: 50px; background: rgba(239, 68, 68, 0.05); transition: all 0.2s;">PURGE</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div style="text-align: center; padding: 4rem 0; opacity: 0.5;">
+                <p>No active contracts in the network.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ResumeAI{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="fade-in">
+    <div id="particles-js"></div>
+    <nav>
+        <a href="{{ url_for('index') }}" class="logo">ResumeAI</a>
+        <div class="nav-links">
+            {% if session.user_id %}
+            {% if session.role == 'user' %}
+            <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+            {% elif session.role == 'hr' %}
+            <a href="{{ url_for('hr_dashboard') }}">HR Dashboard</a>
+            {% elif session.role == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm" style="margin-left: 20px;">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register_selection') }}" class="btn btn-primary btn-sm">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container slide-in">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="card alert-{% if category=='error' %}error{% else %}success{% endif %}"
+            style="margin-bottom: 2rem; padding: 1rem 2rem;">
+            <p style="font-weight: 600;">
+                {{ message }}
+            </p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#8b5cf6" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": false },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#8b5cf6", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+
+</html>

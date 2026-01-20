@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Home - ResumeAI{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 100px 0;" class="fade-in">
+    <div
+        style="display: inline-block; padding: 8px 16px; border-radius: 100px; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); color: var(--primary); font-size: 0.85rem; font-weight: 600; margin-bottom: 2rem; letter-spacing: 0.05em;">
+        POWERED BY ADVANCED AI
+    </div>
+    <h1
+        style="font-size: 4.5rem; font-weight: 800; margin-bottom: 20px; line-height: 1.1; letter-spacing: -0.04em; background: linear-gradient(to bottom right, #fff 30%, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+        Elevate Your Career <br>With AI Precision
+    </h1>
+    <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 3rem; font-weight: 400;">
+        The most powerful AI-driven platform for resume analysis, ATS scoring, and professional matching. Get the edge
+        you deserve in the modern job market.
+    </p>
+
+    {% if not session.get('user_id') %}
+    <div style="display: flex; gap: 20px; justify-content: center; align-items: center;">
+        <a href="{{ url_for('register_selection') }}" class="btn btn-primary"
+            style="padding: 1.25rem 3rem; font-size: 1.1rem; border-radius: 100px;">Get Started Free</a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary"
+            style="padding: 1.25rem 3rem; font-size: 1.1rem; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;">Member
+            Login</a>
+    </div>
+    {% else %}
+    <div class="card" style="max-width: 450px; margin: 0 auto; border-radius: 100px; padding: 1.5rem;">
+        <p
+            style="margin-bottom: 0px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 1rem;">
+            Welcome back, <span style="color: var(--primary); font-weight: 800;">{{ session['username'] }}</span>!
+            <a href="{{ url_for('user_dashboard' if session['role'] == 'user' else 'hr_dashboard' if session['role'] == 'hr' else 'admin_dashboard') }}"
+                class="btn btn-primary" style="padding: 0.75rem 1.5rem; font-size: 0.9rem; border-radius: 50px;">
+                Dashboard
+            </a>
+        </p>
+    </div>
+    {% endif %}
+
+    <div class="grid grid-3" style="margin-top: 120px; text-align: left;">
+        <div class="card" style="border-radius: 32px;">
+            <div
+                style="width: 50px; height: 50px; background: rgba(139, 92, 246, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--primary);">
+                🚀
+            </div>
+            <h3>ATS Optimization</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.7;">Analyze your
+                resume against top industry standards and improve your ATS compatibility score with real-time feedback.
+            </p>
+        </div>
+        <div class="card" style="border-radius: 32px;">
+            <div
+                style="width: 50px; height: 50px; background: rgba(236, 72, 153, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--secondary);">
+                🎯
+            </div>
+            <h3>Job Matching</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.7;">Find roles
+                that perfectly match your skill set with our advanced AI recommendation engine that learns your
+                strengths.</p>
+        </div>
+        <div class="card" style="border-radius: 32px;">
+            <div
+                style="width: 50px; height: 50px; background: rgba(6, 182, 212, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent);">
+                💼
+            </div>
+            <h3>HR Screening</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.7;">Empower HR
+                teams with automated candidate screening, deep analysis tools, and comprehensive decision support.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

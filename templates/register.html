@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Register - ResumeAI{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 80px auto;" class="fade-in">
+    <div class="card glass" style="padding: 4rem; border-radius: 40px; position: relative; overflow: hidden;">
+        <div
+            style="position: absolute; top: 0; right: 0; width: 120px; height: 120px; background: var(--primary-glow); filter: blur(70px); opacity: 0.15;">
+        </div>
+
+        <div class="card-header" style="justify-content: center; margin-bottom: 3rem;">
+            <div style="text-align: center;">
+                <h2
+                    style="font-size: 2.5rem; font-weight: 800; letter-spacing: -0.04em; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    Join the Elite</h2>
+                <p
+                    style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem; letter-spacing: 0.05em; font-weight: 700;">
+                    INITIALIZING {{ role|upper }} ACCOUNT</p>
+            </div>
+        </div>
+
+        <form action="{{ url_for('register', role=role) }}" method="post">
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label
+                    style="color: var(--text-muted); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: block;">
+                    {% if role == 'hr' %}ORGANIZATION NAME{% else %}IDENTITY (FULL NAME){% endif %}
+                </label>
+                <input type="text" id="username" name="username"
+                    placeholder="{% if role == 'hr' %}e.g. Neural Dynamics{% else %}e.g. Alex Rivera{% endif %}"
+                    required
+                    style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.25rem; font-size: 1rem; color: #fff; width: 100%;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label
+                    style="color: var(--text-muted); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: block;">SECURE
+                    EMAIL</label>
+                <input type="email" id="email" name="email" placeholder="name@domain.com" required
+                    style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.25rem; font-size: 1rem; color: #fff; width: 100%;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 3rem;">
+                <label
+                    style="color: var(--text-muted); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: block;">ACCESS
+                    CIPHER (PASSWORD)</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required
+                    style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.25rem; font-size: 1rem; color: #fff; width: 100%;">
+            </div>
+
+            <button type="submit" class="btn btn-primary"
+                style="width: 100%; padding: 1.25rem; border-radius: 100px; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.02em;">
+                Initialize Protocol
+            </button>
+        </form>
+
+        <p style="margin-top: 3rem; text-align: center; font-size: 0.9rem; color: var(--text-muted);">
+            Existing member? <a href="{{ url_for('login') }}"
+                style="color: var(--primary); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.3s;"
+                onmouseover="this.style.borderBottomColor='var(--primary)'"
+                onmouseout="this.style.borderBottomColor='transparent'">Direct Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

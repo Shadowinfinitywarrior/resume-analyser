@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Deep Compatibility Check - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="fade-in" style="max-width: 900px; margin: 0 auto;">
+    <div
+        style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem;">
+        <div>
+            <h2
+                style="font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.5rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                Deep Diagnostic</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Contrast your professional DNA against any
+                high-stakes target.</p>
+        </div>
+        <div style="text-align: right;">
+            <span class="badge"
+                style="background: rgba(6, 182, 212, 0.1); color: var(--accent); padding: 0.75rem 1.5rem; border-radius: 50px; font-size: 0.85rem; letter-spacing: 0.05em; border: 1px solid rgba(6, 182, 212, 0.2);">PRECISION
+                ANALYSIS</span>
+        </div>
+    </div>
+
+    <div class="card slide-in" style="border-radius: 32px; position: relative; overflow: hidden; margin-bottom: 3rem;">
+        <div
+            style="position: absolute; top: 0; right: 0; width: 150px; height: 150px; background: var(--primary-glow); filter: blur(80px); opacity: 0.2;">
+        </div>
+        <div class="card-header" style="margin-bottom: 2rem;">
+            <h3 style="font-size: 1.5rem; font-weight: 700;">Requirement Input</h3>
+            <span style="font-size: 1.5rem; opacity: 0.5;">🎯</span>
+        </div>
+
+        <form method="post">
+            <div class="form-group">
+                <label
+                    style="color: var(--text-muted); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; margin-bottom: 1rem; display: block;">TARGET
+                    JOB DESCRIPTION (JD)</label>
+                <textarea id="job_description" name="job_description" rows="12"
+                    placeholder="Paste the full mission requirement here..." required
+                    style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 1.5rem; color: #fff; font-family: inherit; line-height: 1.7; width: 100%; resize: none;"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary"
+                style="width: 100%; margin-top: 2rem; padding: 1.25rem; border-radius: 100px; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.02em;">
+                <span>Initialize Deep Analysis Sequence</span>
+                <span style="margin-left: 0.5rem;">⚙️</span>
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <div class="card fade-in"
+        style="border-radius: 40px; border-left: 4px solid var(--primary); background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(17, 24, 39, 0.7));">
+        <div style="display: flex; gap: 3rem; align-items: start; flex-wrap: wrap;">
+            <div style="flex-shrink: 0; text-align: center;">
+                <div class="{% if result.score > 70 %}score-high{% elif result.score > 40 %}score-medium{% else %}score-low{% endif %}"
+                    style="width: 120px; height: 120px; border-radius: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; background: rgba(255,255,255,0.02); border: 2px solid;">
+                    <span style="font-size: 2.5rem;">{{ result.score }}%</span>
+                    <span style="font-size: 0.65rem; letter-spacing: 0.1em; margin-top: -0.5rem;">MATCH</span>
+                </div>
+            </div>
+
+            <div style="flex: 1; min-width: 300px;">
+                <h3
+                    style="font-size: 2rem; font-weight: 800; margin-bottom: 1.5rem; color: #fff; letter-spacing: -0.02em;">
+                    AI Diagnostic Report</h3>
+
+                <div
+                    class="diagnostic-card {% if result.score > 80 %}diagnostic-card-high{% elif result.score > 50 %}diagnostic-card-medium{% else %}diagnostic-card-low{% endif %}">
+                    {% if result.score > 80 %}
+                    <p
+                        style="margin: 0; color: #fff; font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.5rem;">✨</span> Optimal Synergy Identified!
+                    </p>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Your professional
+                        profile exhibits high-fidelity alignment with these mission requirements.</p>
+                    {% elif result.score > 50 %}
+                    <p
+                        style="margin: 0; color: #fff; font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.5rem;">⚠️</span> Partial Alignment Detected
+                    </p>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">Key capability vectors
+                        identified, but critical operational gaps remain.</p>
+                    {% else %}
+                    <p
+                        style="margin: 0; color: #fff; font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.5rem;">🛑</span> Low Compatibility Warning
+                    </p>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem;">This role requires
+                        significant structural tailoring or capability enhancement.</p>
+                    {% endif %}
+                </div>
+
+                {% if result.missing_keywords %}
+                <h4
+                    style="font-size: 0.8rem; font-weight: 800; margin-bottom: 1.5rem; color: #fff; letter-spacing: 0.1em;">
+                    CAPABILITY GAP ANALYSIS (TOP 10)</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2rem;">
+                    {% for keyword in result.missing_keywords %}
+                    <span class="badge"
+                        style="background: rgba(255,255,255,0.03); color: var(--text-muted); padding: 0.6rem 1.25rem; border-radius: 100px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.05); font-weight: 600;">{{
+                        keyword|upper }}</span>
+                    {% endfor %}
+                </div>
+                <div
+                    style="background: rgba(139, 92, 246, 0.05); padding: 1.25rem; border-radius: 16px; border: 1px dashed rgba(139, 92, 246, 0.2); font-size: 0.9rem; line-height: 1.6; color: var(--text-muted);">
+                    <strong style="color: var(--primary);">STRATEGY:</strong> Integrating these requirements into your
+                    technical summary or impact sections will significantly enhance ATS detection and recruiter
+                    interest.
+                </div>
+                {% else %}
+                <div
+                    style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 1.5rem; border-radius: 20px; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.2); display: flex; align-items: center; gap: 1rem;">
+                    <span style="font-size: 1.5rem;">✅</span> Zero Matrix Gaps Detected!
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 4rem;">
+        <a href="{{ url_for('user_dashboard') }}"
+            style="color: var(--text-muted); text-decoration: none; font-weight: 700; letter-spacing: 0.05em; font-size: 0.9rem; transition: color 0.3s;"
+            onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'">
+            &larr; RETURN TO COMMAND DASHBOARD
+        </a>
+    </div>
+</div>
+{% endblock %}
